@@ -63,7 +63,13 @@ public class ProductApiControllerTest {
         categoryRepository.save(category);
 
         Option option1 = new Option("옵션1", 10);
-        Product product1 = new Product("상품1", 1000, "이미지URL", category, Collections.singletonList(option1));
+        Product product1 = new Product(
+                "상품1",
+                1000,
+                "이미지URL",
+                category,
+                Collections.singletonList(option1)
+        );
         productRepository.save(product1);
 
         mockMvc.perform(get("/api/products"))
@@ -82,7 +88,13 @@ public class ProductApiControllerTest {
         categoryRepository.save(category);
 
         Option option = new Option("옵션1", 10);
-        Product product = new Product("상품1", 1000, "이미지URL", category, Collections.singletonList(option));
+        Product product = new Product(
+                "상품1",
+                1000,
+                "이미지URL",
+                category,
+                Collections.singletonList(option)
+        );
         productRepository.save(product);
 
         mockMvc.perform(put("/api/products/" + product.getId())
@@ -96,5 +108,27 @@ public class ProductApiControllerTest {
                 .andExpect(jsonPath("$.options", hasSize(1)))
                 .andExpect(jsonPath("$.options[0].name").value("옵션2"))
                 .andExpect(jsonPath("$.options[0].quantity").value(20));
+    }
+
+    @Test
+    void testDeleteProduct() throws Exception {
+        Category category = new Category("카테고리1");
+        categoryRepository.save(category);
+
+        Option option = new Option("옵션1", 10);
+        Product product = new Product(
+                "상품1",
+                1000,
+                "이미지URL",
+                category,
+                Collections.singletonList(option)
+        );
+        productRepository.save(product);
+
+        mockMvc.perform(delete("/api/products/" + product.getId()))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(get("/api/products/" + product.getId()))
+                .andExpect(status().isForbidden());
     }
 }
