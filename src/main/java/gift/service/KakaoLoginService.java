@@ -24,6 +24,22 @@ public class KakaoLoginService {
         this.properties = properties;
     }
 
+    private static String getEmail(ResponseEntity<Map> responseEntity) {
+        var response = responseEntity.getBody();
+        if (response == null) {
+            throw new NoSuchElementException("Response가 없습니다.");
+        }
+        Map<String, Object> kakaoAccount = (Map<String, Object>) response.get("kakao_account");
+        if (kakaoAccount == null) {
+            throw new NoSuchElementException("kakao_account가 없습니다.");
+        }
+        String email = (String) kakaoAccount.get("email");
+        if (email == null) {
+            throw new NoSuchElementException("response에서 Email 정보가 없습니다.");
+        }
+        return email;
+    }
+
     public String getUrl() {
         return "https://kauth.kakao.com/oauth/authorize?"
                 + "scope=account_email"
@@ -62,22 +78,6 @@ public class KakaoLoginService {
             return "회원가입 및 로그인 되었습니다.";
         }
         return "로그인 되었습니다";
-    }
-
-    private static String getEmail(ResponseEntity<Map> responseEntity) {
-        var response = responseEntity.getBody();
-        if (response == null) {
-            throw new NoSuchElementException("Response가 없습니다.");
-        }
-        Map<String, Object> kakaoAccount = (Map<String, Object>) response.get("kakao_account");
-        if (kakaoAccount == null) {
-            throw new NoSuchElementException("kakao_account가 없습니다.");
-        }
-        String email = (String) kakaoAccount.get("email");
-        if (email == null) {
-            throw new NoSuchElementException("response에서 Email 정보가 없습니다.");
-        }
-        return email;
     }
 
     private LinkedMultiValueMap<String, String> createBody(String code) {
