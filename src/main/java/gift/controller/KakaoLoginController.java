@@ -15,7 +15,7 @@ public class KakaoLoginController {
         this.kakaoLoginService = kakaoLoginService;
     }
 
-    @GetMapping("api/kakao/login")
+    @GetMapping("/api/kakao/login")
     public String KakaoLogin() {
         return "redirect:" + kakaoLoginService.getUrl();
     }

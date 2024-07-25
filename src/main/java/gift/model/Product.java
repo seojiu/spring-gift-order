@@ -67,9 +67,11 @@ public class Product {
     private boolean validateOption(Option option, Set<String> optionNames) {
         if (option.getName().length() >= 50 || option.getName().length() <= 0) {
             throw new IllegalArgumentException("옵션 이름은 최대 50자까지 입력 가능합니다.");
-        } if (!optionNames.add(option.getName())) {
+        }
+        if (!optionNames.add(option.getName())) {
             throw new IllegalArgumentException("옵션 이름이 중복됩니다: " + option.getName());
-        } if (option.getQuantity() <= 0 || option.getQuantity() > 99999999) {
+        }
+        if (option.getQuantity() <= 0 || option.getQuantity() > 99999999) {
             throw new IllegalArgumentException("옵션 수량은 최소 1개 이상 1억 개 미만이어야 합니다.");
         }
         return true;
