@@ -32,6 +32,12 @@ public class KakaoLoginService {
                 + "&client_id=" + properties.clientId();
     }
 
+    public String getAccessTokenForMember(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다."));
+        return member.getActiveToken();
+    }
+
     public String getAccessToken(String code) {
         var url = "https://kauth.kakao.com/oauth/token";
         var headers = new HttpHeaders();
@@ -41,6 +47,7 @@ public class KakaoLoginService {
         var request = new RequestEntity<>(body, headers, HttpMethod.POST, URI.create(url));
         var responseEntity = restTemplate.exchange(request, Map.class);
         var response = responseEntity.getBody();
+        System.out.println(response);
 
         if (response == null) {
             throw new NoSuchElementException("Response가 없습니다.");
