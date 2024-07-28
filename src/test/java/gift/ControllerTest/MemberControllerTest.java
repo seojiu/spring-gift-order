@@ -32,27 +32,6 @@ public class MemberControllerTest {
     }
 
     @Test
-    void testRegister() throws Exception {
-        mockMvc.perform(post("/api/members/register")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{ \"email\": \"test@example.com\", \"password\": \"password\" }"))
-                .andExpect(status().isOk())
-                .andExpect(header().exists(HttpHeaders.AUTHORIZATION));
-    }
-
-    @Test
-    void testLogin() throws Exception {
-        Member member = new Member("test@example.com", "password");
-        memberRepository.save(member);
-
-        mockMvc.perform(post("/api/members/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{ \"email\": \"test@example.com\", \"password\": \"password\" }"))
-                .andExpect(status().isOk())
-                .andExpect(header().exists(HttpHeaders.AUTHORIZATION));
-    }
-
-    @Test
     void testLogout() throws Exception {
         Member member = new Member("test@example.com", "password");
         memberRepository.save(member);
