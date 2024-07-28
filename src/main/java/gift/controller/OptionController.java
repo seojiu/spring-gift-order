@@ -6,7 +6,9 @@ import gift.service.OptionService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -28,7 +30,11 @@ public class OptionController {
     @PostMapping("/{productId}/options")
     public ResponseEntity<Option> addOption(@PathVariable Long productId, @RequestBody @Valid OptionDto optionDto) {
         Option newOption = optionService.addOption(productId, optionDto);
-        return ResponseEntity.status(201).body(newOption);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(newOption.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(newOption);
     }
 
     @PutMapping("/{productId}/options/{optionId}")
