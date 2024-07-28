@@ -22,7 +22,8 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody @Valid OrderDto orderDto, @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+    public ResponseEntity<Order> createOrder(@RequestBody @Valid OrderDto orderDto,
+                                             @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
         String token = authHeader.substring(7);
         Member member= memberRepository.findByActiveToken(token)
                 .orElseThrow(() -> new RuntimeException("Invalid token"));
