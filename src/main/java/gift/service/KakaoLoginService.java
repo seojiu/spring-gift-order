@@ -25,15 +25,21 @@ public class KakaoLoginService {
     }
 
     public String getUrl() {
-        return "https://kauth.kakao.com/oauth/authorize?"
+        return properties.authUrl() + "/oauth/authorize?"
                 + "scope=account_email"
                 + "&response_type=code"
                 + "&redirect_uri=" + properties.redirectUrl()
                 + "&client_id=" + properties.clientId();
     }
 
+    public String getAccessTokenForMember(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다."));
+        return member.getActiveToken();
+    }
+
     public String getAccessToken(String code) {
-        var url = "https://kauth.kakao.com/oauth/token";
+        var url = properties.authUrl() + "/oauth/token";
         var headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
         var body = createBody(code);
@@ -41,6 +47,7 @@ public class KakaoLoginService {
         var request = new RequestEntity<>(body, headers, HttpMethod.POST, URI.create(url));
         var responseEntity = restTemplate.exchange(request, Map.class);
         var response = responseEntity.getBody();
+        System.out.println(response);
 
         if (response == null) {
             throw new NoSuchElementException("Response가 없습니다.");
@@ -49,7 +56,7 @@ public class KakaoLoginService {
     }
 
     public String signUpAndLogin(String accessToken) {
-        var url = "https://kapi.kakao.com/v2/user/me";
+        var url = properties.apiUrl() + "/v2/user/me";
         var headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + accessToken);
 
@@ -61,6 +68,10 @@ public class KakaoLoginService {
             memberRepository.save(new Member(email, "비밀번호", accessToken));
             return "회원가입 및 로그인 되었습니다.";
         }
+        Member existingMember = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Member not found with email: " + email));
+        Member updatedMember = new Member(existingMember, accessToken);
+        memberRepository.save(updatedMember);
         return "로그인 되었습니다";
     }
 

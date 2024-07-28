@@ -62,12 +62,12 @@ public class OptionService {
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 상품입니다."));
     }
 
-    private Product findProductByOptionId(Long optionId) {
+    public Product findProductByOptionId(Long optionId) {
         return optionRepository.findProductByOptionId(optionId)
                 .orElseThrow(() -> new NoSuchElementException("상품이 존재하지 않는 옵션입니다."));
     }
 
-    private Option findOptionById(Long optionId) {
+    public Option findOptionById(Long optionId) {
         return optionRepository.findById(optionId)
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 옵션입니다."));
     }

@@ -1,11 +1,12 @@
 package gift.controller;
 
-import gift.dto.MemberDto;
 import gift.service.MemberService;
-import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/members")
@@ -14,22 +15,6 @@ public class MemberController {
 
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody @Valid MemberDto memberDto) {
-        String token = memberService.register(memberDto);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
-        return ResponseEntity.ok().headers(headers).body("{\"token\": \"" + token + "\"}");
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody @Valid MemberDto memberDto) {
-        String token = memberService.login(memberDto);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
-        return ResponseEntity.ok().headers(headers).body("{\"token\": \"" + token + "\"}");
     }
 
     @PostMapping("/logout")

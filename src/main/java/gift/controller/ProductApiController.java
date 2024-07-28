@@ -10,6 +10,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/products")
@@ -36,7 +39,11 @@ public class ProductApiController {
     @PostMapping
     public ResponseEntity<Product> addProduct(@RequestBody @Valid ProductDto productDto) {
         Product savedProduct = productService.addProduct(productDto);
-        return ResponseEntity.status(201).body(savedProduct);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(savedProduct.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(savedProduct);
     }
 
     @PutMapping("/{id}")

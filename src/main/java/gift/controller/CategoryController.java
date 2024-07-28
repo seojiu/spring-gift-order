@@ -6,7 +6,9 @@ import gift.service.CategoryService;
 import gift.service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -35,7 +37,11 @@ public class CategoryController {
     @PostMapping
     public ResponseEntity<Category> addCategory(@RequestBody CategoryDto categoryDto) {
         Category category = categoryService.addCategory(categoryDto);
-        return ResponseEntity.status(201).body(category);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(category.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(category);
     }
 
     @PutMapping("/{id}")
