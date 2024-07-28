@@ -1,5 +1,6 @@
 package gift.service;
 
+import gift.config.KakaoProperties;
 import gift.model.Order;
 import gift.model.Product;
 import gift.repository.OptionRepository;
@@ -18,17 +19,19 @@ public class KakaoMessageService {
     private final RestTemplate restTemplate = new RestTemplate();
     private final KakaoLoginService kakaoLoginService;
     private final OptionRepository optionRepository;
+    private final KakaoProperties properties;
 
-    private final String kakaoApiUrl = "https://kapi.kakao.com";
-
-    public KakaoMessageService(KakaoLoginService kakaoLoginService, OptionRepository optionRepository) {
+    public KakaoMessageService(KakaoLoginService kakaoLoginService,
+                               OptionRepository optionRepository,
+                               KakaoProperties properties) {
         this.kakaoLoginService = kakaoLoginService;
         this.optionRepository = optionRepository;
+        this.properties = properties;
     }
 
     public void sendMessageToKakao(Order order, Long memberId) {
         String accessToken = kakaoLoginService.getAccessTokenForMember(memberId);
-        String url = kakaoApiUrl + "/v2/api/talk/memo/send";
+        String url = properties.apiUrl() + "/v2/api/talk/memo/send";
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + accessToken);
