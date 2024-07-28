@@ -1,6 +1,5 @@
 package gift.controller;
 
-import gift.model.CurrentMember;
 import gift.model.Member;
 import gift.model.Wishlist;
 import gift.repository.MemberRepository;
@@ -32,7 +31,7 @@ public class WishlistController {
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
             @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
         String token = authHeader.substring(7);
-        Member member= memberRepository.findByActiveToken(token)
+        Member member = memberRepository.findByActiveToken(token)
                 .orElseThrow(() -> new RuntimeException("Invalid token"));
         Page<Wishlist> wishlistPage = wishlistService.getWishlist(member.getId(), pageable);
         return ResponseEntity.ok(wishlistPage);
@@ -41,7 +40,7 @@ public class WishlistController {
     @PostMapping("/{productId}")
     public ResponseEntity<Void> addProductToWishlist(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader, @PathVariable Long productId) {
         String token = authHeader.substring(7);
-        Member member= memberRepository.findByActiveToken(token)
+        Member member = memberRepository.findByActiveToken(token)
                 .orElseThrow(() -> new RuntimeException("Invalid token"));
         wishlistService.addProductToWishlist(member.getId(), productId);
         return ResponseEntity.created(URI.create("/api/wishlist/" + productId)).build();
@@ -50,7 +49,7 @@ public class WishlistController {
     @DeleteMapping("/{productId}")
     public ResponseEntity<Void> removeProductFromWishlist(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader, @PathVariable Long productId) {
         String token = authHeader.substring(7);
-        Member member= memberRepository.findByActiveToken(token)
+        Member member = memberRepository.findByActiveToken(token)
                 .orElseThrow(() -> new RuntimeException("Invalid token"));
         wishlistService.removeProductFromWishlist(member.getId(), productId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
