@@ -1,6 +1,7 @@
 package gift.model;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -24,7 +25,8 @@ public class Order {
     @Column(nullable = false)
     private String message;
 
-    public Order() {}
+    public Order() {
+    }
 
     public Order(Option option, int quantity, String message) {
         this.option = option;
