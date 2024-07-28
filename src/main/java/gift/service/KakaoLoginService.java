@@ -25,7 +25,7 @@ public class KakaoLoginService {
     }
 
     public String getUrl() {
-        return "https://kauth.kakao.com/oauth/authorize?"
+        return properties.authUrl() + "/oauth/authorize?"
                 + "scope=account_email"
                 + "&response_type=code"
                 + "&redirect_uri=" + properties.redirectUrl()
@@ -39,7 +39,7 @@ public class KakaoLoginService {
     }
 
     public String getAccessToken(String code) {
-        var url = "https://kauth.kakao.com/oauth/token";
+        var url = properties.authUrl() + "/oauth/token";
         var headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
         var body = createBody(code);
@@ -56,7 +56,7 @@ public class KakaoLoginService {
     }
 
     public String signUpAndLogin(String accessToken) {
-        var url = "https://kapi.kakao.com/v2/user/me";
+        var url = properties.apiUrl() + "/v2/user/me";
         var headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + accessToken);
 
