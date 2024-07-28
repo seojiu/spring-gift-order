@@ -3,7 +3,9 @@ package gift.service;
 import gift.dto.OrderDto;
 import gift.model.Option;
 import gift.model.Order;
+import gift.model.Product;
 import gift.repository.OrderRepository;
+import gift.repository.WishlistRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -11,14 +13,14 @@ import org.springframework.stereotype.Service;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final OptionService optionService;
+    private final WishlistRepository wishlistRepository;
     private final KakaoMessageService kakaoMessageService;
 
-    public OrderService(OrderRepository orderRepository,
-                        OptionService optionService,
-                        KakaoMessageService kakaoMessageService
-    ) {
+    public OrderService(OrderRepository orderRepository, OptionService optionService,
+                        WishlistRepository wishlistRepository, KakaoMessageService kakaoMessageService) {
         this.orderRepository = orderRepository;
         this.optionService = optionService;
+        this.wishlistRepository = wishlistRepository;
         this.kakaoMessageService = kakaoMessageService;
     }
 
@@ -33,6 +35,9 @@ public class OrderService {
 
         Order order = new Order(option, orderDto.getQuantity(), orderDto.getMessage());
         orderRepository.save(order);
+        Product product = optionService.findProductByOptionId(option.getId());
+
+        wishlistRepository.deleteByMemberIdAndProductId(memberId, product.getId());
 
         kakaoMessageService.sendMessageToKakao(order, memberId);
         return order;
