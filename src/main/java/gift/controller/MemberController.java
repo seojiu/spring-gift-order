@@ -2,12 +2,14 @@ package gift.controller;
 
 import gift.dto.MemberDto;
 import gift.service.MemberService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Tag(name = "Member", description = "회원 관련 api")
 @RequestMapping("/api/members")
 public class MemberController {
     private final MemberService memberService;

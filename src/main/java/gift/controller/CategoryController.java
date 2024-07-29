@@ -4,6 +4,7 @@ import gift.dto.CategoryDto;
 import gift.model.Category;
 import gift.service.CategoryService;
 import gift.service.ProductService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -12,6 +13,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@Tag(name = "Category", description = "카테고리 관련 api")
 @RequestMapping("/api/categories")
 public class CategoryController {
     private final CategoryService categoryService;
@@ -28,9 +30,9 @@ public class CategoryController {
         return ResponseEntity.ok(categories);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Category> getCategoryById(@PathVariable Long id) {
-        Category category = categoryService.getCategoryById(id);
+    @GetMapping("/{CategoryId}")
+    public ResponseEntity<Category> getCategoryById(@PathVariable Long CategoryId) {
+        Category category = categoryService.getCategoryById(CategoryId);
         return ResponseEntity.ok(category);
     }
 
@@ -38,22 +40,22 @@ public class CategoryController {
     public ResponseEntity<Category> addCategory(@RequestBody CategoryDto categoryDto) {
         Category category = categoryService.addCategory(categoryDto);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
+                .path("/{CategoryId}")
                 .buildAndExpand(category.getId())
                 .toUri();
         return ResponseEntity.created(location).body(category);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody CategoryDto categoryDto) {
-        Category category = categoryService.updateCategory(id, categoryDto);
+    @PutMapping("/{CategoryId}")
+    public ResponseEntity<Category> updateCategory(@PathVariable Long CategoryId, @RequestBody CategoryDto categoryDto) {
+        Category category = categoryService.updateCategory(CategoryId, categoryDto);
         return ResponseEntity.ok(category);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
-        productService.updateProductCategoryToNone(id);
-        categoryService.deleteCategory(id);
+    @DeleteMapping("/{CategoryId}")
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long CategoryId) {
+        productService.updateProductCategoryToNone(CategoryId);
+        categoryService.deleteCategory(CategoryId);
         return ResponseEntity.noContent().build();
     }
 }

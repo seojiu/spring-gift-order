@@ -5,12 +5,14 @@ import gift.model.Member;
 import gift.model.Order;
 import gift.repository.MemberRepository;
 import gift.service.OrderService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Tag(name = "Order", description = "상품 주문 관련 api")
 @RequestMapping("/api/orders")
 public class OrderController {
     private final OrderService orderService;

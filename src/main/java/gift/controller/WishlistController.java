@@ -4,6 +4,7 @@ import gift.model.Member;
 import gift.model.Wishlist;
 import gift.repository.MemberRepository;
 import gift.service.WishlistService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 
 @RestController
+@Tag(name = "Wishlist", description = "위시리스트 관련 api")
 @RequestMapping("/api/wishlist")
 public class WishlistController {
     private final WishlistService wishlistService;
