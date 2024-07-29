@@ -26,7 +26,7 @@ public class ProductWebController {
 
     @GetMapping
     public String getAllProducts(Model model,
-                                 @PageableDefault(size = 10, sort = {"ProductId"},
+                                 @PageableDefault(size = 10, sort = {"id"},
                                          direction = Sort.Direction.ASC) Pageable pageable) {
         Page<Product> productPage = productService.getProducts(pageable);
         model.addAttribute("products", productPage.getContent());
