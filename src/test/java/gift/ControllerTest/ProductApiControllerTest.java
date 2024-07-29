@@ -16,8 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Collections;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -74,5 +73,55 @@ public class ProductApiControllerTest {
                 .andExpect(jsonPath("$.content[0].options", hasSize(1)))
                 .andExpect(jsonPath("$.content[0].options[0].name").value("옵션1"))
                 .andExpect(jsonPath("$.content[0].options[0].quantity").value(10));
+    }
+
+    @Test
+    void testUpdateProduct() throws Exception {
+        Category category = new Category("카테고리1");
+        categoryRepository.save(category);
+
+        Option option = new Option("옵션1", 10);
+        Product product = new Product(
+                "상품1",
+                1000,
+                "이미지URL",
+                category,
+                Collections.singletonList(option)
+        );
+        productRepository.save(product);
+
+        mockMvc.perform(put("/api/products/" + product.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{ \"name\": \"상품2\", \"price\": 2000, \"categoryId\": "
+                                + category.getId()
+                                + ", \"options\": [ { \"name\": \"옵션2\", \"quantity\": 20 } ] }"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("상품2"))
+                .andExpect(jsonPath("$.price").value(2000))
+                .andExpect(jsonPath("$.options", hasSize(1)))
+                .andExpect(jsonPath("$.options[0].name").value("옵션2"))
+                .andExpect(jsonPath("$.options[0].quantity").value(20));
+    }
+
+    @Test
+    void testDeleteProduct() throws Exception {
+        Category category = new Category("카테고리1");
+        categoryRepository.save(category);
+
+        Option option = new Option("옵션1", 10);
+        Product product = new Product(
+                "상품1",
+                1000,
+                "이미지URL",
+                category,
+                Collections.singletonList(option)
+        );
+        productRepository.save(product);
+
+        mockMvc.perform(delete("/api/products/" + product.getId()))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(get("/api/products/" + product.getId()))
+                .andExpect(status().isForbidden());
     }
 }
