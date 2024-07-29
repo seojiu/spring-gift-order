@@ -4,6 +4,7 @@ import gift.model.Member;
 import gift.model.Wishlist;
 import gift.repository.MemberRepository;
 import gift.service.WishlistService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +30,7 @@ public class WishlistController {
     }
 
     @GetMapping
+    @Operation(summary = "회원의 모든 위시리스트 조회", description = "회원의 모든 위시리스트를 조회합니다.")
     public ResponseEntity<Page<Wishlist>> getWishlist(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
             @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
@@ -40,6 +42,7 @@ public class WishlistController {
     }
 
     @PostMapping("/{productId}")
+    @Operation(summary = "상품 id로 위시리스트 추가", description = "상품 id로 위시리스트 추가합니다.")
     public ResponseEntity<Void> addProductToWishlist(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader, @PathVariable Long productId) {
         String token = authHeader.substring(7);
         Member member = memberRepository.findByActiveToken(token)
@@ -49,6 +52,7 @@ public class WishlistController {
     }
 
     @DeleteMapping("/{productId}")
+    @Operation(summary = "상품 id로 위시리스트 삭제", description = "상품 id로 위시리스트 삭제합니다.")
     public ResponseEntity<Void> removeProductFromWishlist(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader, @PathVariable Long productId) {
         String token = authHeader.substring(7);
         Member member = memberRepository.findByActiveToken(token)

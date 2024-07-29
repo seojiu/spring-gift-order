@@ -4,6 +4,7 @@ import gift.dto.CategoryDto;
 import gift.model.Category;
 import gift.service.CategoryService;
 import gift.service.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,18 +26,21 @@ public class CategoryController {
     }
 
     @GetMapping
+    @Operation(summary = "모든 카테고리 조회", description = "모든 카테고리를 조회합니다.")
     public ResponseEntity<List<Category>> getAllCategories() {
         List<Category> categories = categoryService.getAllCategories();
         return ResponseEntity.ok(categories);
     }
 
     @GetMapping("/{CategoryId}")
+    @Operation(summary = "카테고리 id로 카테고리 조회", description = "카테고리 id로 카테고리를 조회합니다.")
     public ResponseEntity<Category> getCategoryById(@PathVariable Long CategoryId) {
         Category category = categoryService.getCategoryById(CategoryId);
         return ResponseEntity.ok(category);
     }
 
     @PostMapping
+    @Operation(summary = "카테고리 추가", description = "카테고리를 추가합니다.")
     public ResponseEntity<Category> addCategory(@RequestBody CategoryDto categoryDto) {
         Category category = categoryService.addCategory(categoryDto);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -47,12 +51,14 @@ public class CategoryController {
     }
 
     @PutMapping("/{CategoryId}")
+    @Operation(summary = "카테고리 수정", description = "카테고리를 수정합니다.")
     public ResponseEntity<Category> updateCategory(@PathVariable Long CategoryId, @RequestBody CategoryDto categoryDto) {
         Category category = categoryService.updateCategory(CategoryId, categoryDto);
         return ResponseEntity.ok(category);
     }
 
     @DeleteMapping("/{CategoryId}")
+    @Operation(summary = "카테고리 삭제", description = "카테고리를 삭제합니다.")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long CategoryId) {
         productService.updateProductCategoryToNone(CategoryId);
         categoryService.deleteCategory(CategoryId);
