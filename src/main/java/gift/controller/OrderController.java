@@ -5,12 +5,15 @@ import gift.model.Member;
 import gift.model.Order;
 import gift.repository.MemberRepository;
 import gift.service.OrderService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Tag(name = "Order", description = "상품 주문 관련 api")
 @RequestMapping("/api/orders")
 public class OrderController {
     private final OrderService orderService;
@@ -22,6 +25,7 @@ public class OrderController {
     }
 
     @PostMapping
+    @Operation(summary = "주문하기", description = "주문을 합니다.")
     public ResponseEntity<Order> createOrder(@RequestBody @Valid OrderDto orderDto,
                                              @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
         String token = authHeader.substring(7);
