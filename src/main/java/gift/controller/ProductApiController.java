@@ -34,10 +34,10 @@ public class ProductApiController {
         return ResponseEntity.ok(productPage);
     }
 
-    @GetMapping("/{ProductId}")
+    @GetMapping("/{productId}")
     @Operation(summary = "상품 id로 상품 조회", description = "상품 id로 상품을 조회합니다.")
-    public ResponseEntity<Product> getProductById(@PathVariable Long ProductId) {
-        Product product = productService.getProductById(ProductId);
+    public ResponseEntity<Product> getProductById(@PathVariable Long productId) {
+        Product product = productService.getProductById(productId);
         return ResponseEntity.ok(product);
     }
 
@@ -52,18 +52,18 @@ public class ProductApiController {
         return ResponseEntity.created(location).body(savedProduct);
     }
 
-    @PutMapping("/{ProductId}")
+    @PutMapping("/{productId}")
     @Operation(summary = "상품 수정", description = "상품 id로 상품을 수정합니다.")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long ProductId,
+    public ResponseEntity<Product> updateProduct(@PathVariable Long productId,
                                                  @RequestBody @Valid ProductDto productDto) {
-        Product product = productService.updateProduct(ProductId, productDto);
+        Product product = productService.updateProduct(productId, productDto);
         return ResponseEntity.ok(product);
     }
 
-    @DeleteMapping("/{ProductId}")
+    @DeleteMapping("/{productId}")
     @Operation(summary = "상품 삭제", description = "상품 id로 상품을 삭제합니다.")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long ProductId) {
-        productService.deleteProduct(ProductId);
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long productId) {
+        productService.deleteProduct(productId);
         return ResponseEntity.noContent().build();
     }
 }

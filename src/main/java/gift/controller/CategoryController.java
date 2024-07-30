@@ -32,10 +32,10 @@ public class CategoryController {
         return ResponseEntity.ok(categories);
     }
 
-    @GetMapping("/{CategoryId}")
+    @GetMapping("/{categoryId}")
     @Operation(summary = "카테고리 id로 카테고리 조회", description = "카테고리 id로 카테고리를 조회합니다.")
-    public ResponseEntity<Category> getCategoryById(@PathVariable Long CategoryId) {
-        Category category = categoryService.getCategoryById(CategoryId);
+    public ResponseEntity<Category> getCategoryById(@PathVariable Long categoryId) {
+        Category category = categoryService.getCategoryById(categoryId);
         return ResponseEntity.ok(category);
     }
 
@@ -44,24 +44,24 @@ public class CategoryController {
     public ResponseEntity<Category> addCategory(@RequestBody CategoryDto categoryDto) {
         Category category = categoryService.addCategory(categoryDto);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{CategoryId}")
+                .path("/{categoryId}")
                 .buildAndExpand(category.getId())
                 .toUri();
         return ResponseEntity.created(location).body(category);
     }
 
-    @PutMapping("/{CategoryId}")
+    @PutMapping("/{categoryId}")
     @Operation(summary = "카테고리 수정", description = "카테고리를 수정합니다.")
-    public ResponseEntity<Category> updateCategory(@PathVariable Long CategoryId, @RequestBody CategoryDto categoryDto) {
-        Category category = categoryService.updateCategory(CategoryId, categoryDto);
+    public ResponseEntity<Category> updateCategory(@PathVariable Long categoryId, @RequestBody CategoryDto categoryDto) {
+        Category category = categoryService.updateCategory(categoryId, categoryDto);
         return ResponseEntity.ok(category);
     }
 
-    @DeleteMapping("/{CategoryId}")
+    @DeleteMapping("/{categoryId}")
     @Operation(summary = "카테고리 삭제", description = "카테고리를 삭제합니다.")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long CategoryId) {
-        productService.updateProductCategoryToNone(CategoryId);
-        categoryService.deleteCategory(CategoryId);
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long categoryId) {
+        productService.updateProductCategoryToNone(categoryId);
+        categoryService.deleteCategory(categoryId);
         return ResponseEntity.noContent().build();
     }
 }
